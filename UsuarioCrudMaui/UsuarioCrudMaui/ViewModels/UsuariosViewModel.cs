@@ -30,8 +30,8 @@ public class UsuariosViewModel : BaseViewModel
         Title = "Usuários";
         LoadCommand = new AsyncRelayCommand(LoadAsync);
         AddCommand = new AsyncRelayCommand(AddAsync);
-        EditCommand = new AsyncRelayCommand(EditAsync);
-        DeleteCommand = new AsyncRelayCommand(DeleteAsync);
+        EditCommand = new AsyncRelayCommand<Usuario>(EditAsync);
+        DeleteCommand = new AsyncRelayCommand<Usuario>(DeleteAsync);
     }
 
     async Task LoadAsync()
@@ -50,16 +50,16 @@ public class UsuariosViewModel : BaseViewModel
     async Task AddAsync()
         => await Shell.Current.GoToAsync(nameof(Views.UsuarioFormPage));
 
-    async Task EditAsync()
+    async Task EditAsync(Usuario u)
     {
-        if (Selected == null) return;
-        await Shell.Current.GoToAsync($"{nameof(Views.UsuarioFormPage)}?Id={Selected.Id}");
+        if (u == null) return;
+        await Shell.Current.GoToAsync($"{nameof(Views.UsuarioFormPage)}?Id={u.Id}");
     }
 
-    async Task DeleteAsync()
+    async Task DeleteAsync(Usuario u)
     {
-        if (Selected == null) return;
-        await service.DeleteAsync(Selected.Id);
+        if (u == null) return;
+        await service.DeleteAsync(u.Id);
         await LoadAsync();
-    }
+    }   
 }
